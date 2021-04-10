@@ -31,16 +31,22 @@ class Quiz::Session
     @quiz_questions = quiz.quiz_questions
   end
 
+  def reportable?
+    complete? && !ignored?
+  end
+
   def valid?
     @quiz_questions.map(&:answered?).all?
   end
 
-  def present?
-    @quiz_questions.any?
+  def ignored?
+    @quiz_questions.empty?
   end
 
   def correct_answers_ratio
-    correct_answers_count.fdiv(@quiz_questions.size)
+    quiz_size = @quiz_questions.size
+    rational_params = quiz_size.zero? ? [1, 1] : [correct_answers_count, quiz_size]
+    Rational(*rational_params).to_f
   end
 
   def correct_answers_count
@@ -59,7 +65,7 @@ class Quiz::Session
     return false unless valid?
 
     @quiz_questions.all?(&:save!)
-    quiz.update(complete: true)
+    quiz.update(complete: true, ignored: ignored?)
     true
   end
 end
