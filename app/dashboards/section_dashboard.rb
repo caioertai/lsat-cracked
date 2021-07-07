@@ -10,9 +10,9 @@ class SectionDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     title: Field::String,
-    questions: Field::HasMany,
+    questions: Field::NestedHasMany.with_options(skip: :section),
     content: RichTextField,
-    chapter: Field::BelongsTo,
+    chapter: Field::BelongsToSearch.with_options(class_name: :Chapter),
     position: Field::Number,
   }.freeze
 
@@ -22,8 +22,10 @@ class SectionDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
-    chapter
     title
+    position
+    chapter
+    questions
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES

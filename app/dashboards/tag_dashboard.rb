@@ -13,6 +13,8 @@ class TagDashboard < Administrate::BaseDashboard
     premium: Field::Boolean,
     questions: Field::HasMany,
     questions_count: Field::Number,
+    user: Field::BelongsTo,
+    # questions: Field::NestedHasMany.with_options(skip: :questions),
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -21,7 +23,9 @@ class TagDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
+    questions
     slug
+    premium
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -39,6 +43,7 @@ class TagDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     slug
     premium
+    user
   ].freeze
 
   # COLLECTION_FILTERS
